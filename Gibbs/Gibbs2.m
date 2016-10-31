@@ -22,7 +22,7 @@ function varargout = Gibbs2(varargin)
 
 % Edit the above text to modify the response to help Gibbs2
 
-% Last Modified by GUIDE v2.5 31-Oct-2016 15:49:19
+% Last Modified by GUIDE v2.5 31-Oct-2016 22:12:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -68,6 +68,19 @@ function varargout = Gibbs2_OutputFcn(hObject, eventdata, handles)
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+t=-2:0.01:2;
+x=4/pi*sin(t*pi);
+y = square(x, 50);
+plot(t,x);
+hold on
+plot(t,y,'r');
+hold off
+xlim([-2, 2]);
+ylim([-1.5, 1.5]);
+grid on;
+title('最初一次正弦信号');
+xlabel('t');
+ylabel('x(t)');
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -78,19 +91,22 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
 t=-2:0.01:2;
 x=4/pi*sin(t*pi);
-plot(t,x);
-grid on;
-title('吉布斯现象动画');
-xlabel('t/pi');
-ylabel('x(t)');
 for n=3:2:99
     pause(0.3);
-    x=x+(4/(n*pi)*sin(n*t*pi));   
+    x=x+(4/(n*pi)*sin(n*t*pi));
+    y = square(x, 50);
     plot(t,x);
+    hold on
+    plot(t,y,'r');
+    hold off
+    xlim([-2 2]);
+    ylim([-1.5 1.5]);
     grid on;
     title('吉布斯现象动画');
     xlabel('t/pi');
     ylabel('x(t)');
 end
+
