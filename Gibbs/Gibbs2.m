@@ -68,15 +68,15 @@ function varargout = Gibbs2_OutputFcn(hObject, eventdata, handles)
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-t=-2:0.01:2;
-x=4/pi*sin(t*pi);
+t = -2: 0.001: 2;
+x = 4/pi * sin(t*pi);
 y = square(x, 50);
-plot(t,x);
+plot(t, x);
 hold on
-plot(t,y,'r');
+plot(t, y, 'r');
 hold off
 xlim([-2, 2]);
-ylim([-1.5, 1.5]);
+ylim([-1.5 1.5]);
 grid on;
 title('最初一次正弦信号');
 xlabel('t');
@@ -92,15 +92,15 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-t=-2:0.01:2;
-x=4/pi*sin(t*pi);
-for n=3:2:99
+t = -2: 0.001: 2;
+x = 4/pi * sin(t*pi);
+for n = 3: 2: 199
     pause(0.3);
-    x=x+(4/(n*pi)*sin(n*t*pi));
+    x = x + (4/(n*pi) * sin(n*t*pi));
     y = square(x, 50);
-    plot(t,x);
+    plot(t, x);
     hold on
-    plot(t,y,'r');
+    plot(t, y, 'r');
     hold off
     xlim([-2 2]);
     ylim([-1.5 1.5]);
