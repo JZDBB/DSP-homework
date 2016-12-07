@@ -22,7 +22,7 @@ function varargout = Gibbs2(varargin)
 
 % Edit the above text to modify the response to help Gibbs2
 
-% Last Modified by GUIDE v2.5 31-Oct-2016 22:12:12
+% Last Modified by GUIDE v2.5 06-Dec-2016 23:18:24
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,7 +51,22 @@ function Gibbs2_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to Gibbs2 (see VARARGIN)
+handles.N = 1;
+set(handles.edit2, 'String', num2str(handles.N));
 
+t = -2: 0.001: 2;
+x = 4/pi * sin(t*pi);
+y = square(x, 50);
+plot(t, x);
+hold on
+plot(t, y, 'r');
+hold off
+xlim([-2, 2]);
+ylim([-1.5 1.5]);
+grid on;
+title('最初一次正弦信号');
+xlabel('t');
+ylabel('x(t)');
 % Choose default command line output for Gibbs2
 handles.output = hObject;
 
@@ -68,19 +83,6 @@ function varargout = Gibbs2_OutputFcn(hObject, eventdata, handles)
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-t = -2: 0.001: 2;
-x = 4/pi * sin(t*pi);
-y = square(x, 50);
-plot(t, x);
-hold on
-plot(t, y, 'r');
-hold off
-xlim([-2, 2]);
-ylim([-1.5 1.5]);
-grid on;
-title('最初一次正弦信号');
-xlabel('t');
-ylabel('x(t)');
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -91,11 +93,12 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+N = str2double(handles.N);
 t = -2: 0.001: 2;
 x = 4/pi * sin(t*pi);
-for n = 3: 2: 199
-    pause(0.3);
+
+for n = 3: 2: N;
+    pause(2/n);
     x = x + (4/(n*pi) * sin(n*t*pi));
     y = square(x, 50);
     plot(t, x);
@@ -110,3 +113,32 @@ for n = 3: 2: 199
     ylabel('x(t)');
 end
 
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton2.
+function pushbutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.N = get(handles.edit2,'String');
+guidata(hObject, handles);
