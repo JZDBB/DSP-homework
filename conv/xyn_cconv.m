@@ -22,7 +22,7 @@ function varargout = xyn_cconv(varargin)
 
 % Edit the above text to modify the response to help xyn_cconv
 
-% Last Modified by GUIDE v2.5 06-Dec-2016 18:12:46
+% Last Modified by GUIDE v2.5 07-Dec-2016 09:45:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,8 +51,16 @@ function xyn_cconv_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to xyn_cconv (see VARARGIN)
+x.index = [0 1 2 3];
+x.value = [1 3 2 -1];
+h.index = [0 1 2 3];
+h.value = [1 -1 0 1];
+stem(handles.axes1,x.index,x.value,'.');
+set(handles.axes1,'XLim',[-4 8]);
+stem(handles.axes2,h.index,h.value,'.');
+set(handles.axes2,'XLim',[-4 8]);
 
-
+handles.track = 0;
 % Choose default command line output for xyn_cconv
 handles.output = hObject;
 
@@ -82,46 +90,82 @@ x.index = [0 1 2 3];
 x.value = [1 3 2 -1];
 h.index = [0 1 2 3];
 h.value = [1 -1 0 1];
-h1.value = h.value(end:-1:1);
-h.index = -h.index;
-h.index = h.index(end:-1:1);
+% y.value = conv1(x.value, h.value);
 m = length(x.value);
 n = length(h.value);
 N = n + m - 1;
-b = zeros(1,n);
-for k = 0:2*m
-    stem(handles.axes1,x.index,x.value,'.');
-    set(handles.axes1,'XLim',[-4 10]);
 
-    h.index = h.index + 1;
+handles.min = -n;
+handles.max = m+n;
+
+h1.value = h.value(end:-1:1);
+
+b = zeros(1,n);
+x.value = [b x.value b 0];
+x.index = -n:n+m ;
+b = zeros(1,m + n);
+h1.value = [0 h1.value b];
+h1.index = -n:n+m;
+
+stem(handles.axes1,x.index,x.value,'.');
+set(handles.axes1,'XLim',[-n n+m]);
+handles.x = x;
+handles.h = h1;
+handles.m = m;
+handles.n = n;
+for k = 1:m+n
+    value = circshift(h1.value,[0,k-1]);
+    stem(handles.axes2,h1.index,value,'.');
+    set(handles.axes2,'XLim',[-n n+m]);
+	
+	y.index = -n:m+n-1;
+	y.value(find(y.index==k - 1)) = value * x.value';
+	hold on
+    stem(handles.axes3,y.index(find(y.index==k - 1)),y.value(find(y.index==k - 1)),'.','Color',[0,0,1]);
+    set(handles.axes3,'XLim',[-n n+m]);
+    ylim(handles.axes3,[-2,4]);
+    hold off
     
-    stem(handles.axes2,h.index,h1.value,'.');
-    set(handles.axes2,'XLim',[-4 10]);
-	
-% 	if (find(x.value) == 0)
-% 		pause(0.5);
-% 		return;
-% 	end
-	
-	y.value = x.value.*h.value;
-	
-	y.index = ;
-	y.value = zeros(1,N);
-	
-	y.value = x.value*h.value;
-	
-    stem(handles.axes3,n,y,'.');
-    set(handles.axes3,'XLim',[-4 10]);
-    pause(0.5);
+	pause(0.5);
+end
+guidata(hObject, handles);
+
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on mouse motion over figure - except title and menu.
+function figure1_WindowButtonMotionFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+if handles.track == true
+    m = handles.m;
+    n = handles.n;
+    x = handles.x;
+    h1 = handles.h;
+    currPt = get(handles.axes3, 'CurrentPoint');
+    px = currPt(1,1);
+    if(px>handles.min&&px<handles.max)
+        axes(handles.axes3);
+        cla;
+        km = (px-handles.min)/(handles.max-handles.min)*handles.max;
+        for k = 1:km
+            value = circshift(h1.value,[0,k-1]);
+            stem(handles.axes2,h1.index,value,'.');
+            set(handles.axes2,'XLim',[-n n+m]);
+            y.index = -n:m+n-1;
+            y.value(find(y.index==k - 1)) = value * x.value';
+            hold on
+            stem(handles.axes3,y.index(find(y.index==k - 1)),y.value(find(y.index==k - 1)),'.','Color',[0,0,1]);
+            set(handles.axes3,'XLim',[-n n+m]);
+            ylim(handles.axes3,[-2,4]);
+            hold off
+        end
+    end
 end
 
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-
-
-% --- Executes on button press in pushbutton2.
 function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+handles.track = ~handles.track;
+guidata(hObject, handles);

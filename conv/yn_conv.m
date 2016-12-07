@@ -1,4 +1,4 @@
-function y = conv1(x,h)
+function y = yn_conv(x,h)
 m = length(x);
 n = length(h);
 N = m + n -1;
@@ -10,7 +10,6 @@ if m >= n
 	m = n;
 	n = t;
 end
-a = n;
 b = zeros(1,n);
 x = [b x b];
 h = h(end:-1:1);
