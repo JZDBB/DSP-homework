@@ -95,15 +95,15 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 N = str2double(handles.N);
 t = -2: 0.001: 2;
-x = 4/pi * sin(t*pi);
+x = 4/pi * sin(t*pi);    % the first sin function
 
-for n = 3: 2: N;
-    pause(2/n);
+for n = 3: 2: N    % Nth harmonic superposition
+    pause(2/n);    % pause delay decided by n
     x = x + (4/(n*pi) * sin(n*t*pi));
-    y = square(x, 50);
-    plot(t, x);
-    hold on
-    plot(t, y, 'r');
+    y = square(x, 50);   % a square wave
+    plot(t, x);          % the main signal wave
+    hold on              
+    plot(t, y, 'r');     % the square wave
     hold off
     xlim([-2 2]);
     ylim([-1.5 1.5]);
