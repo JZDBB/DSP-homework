@@ -11,4 +11,5 @@ for n = 1:N
     y(n) = x*h;
     x = circshift(x, [0, 1]);
 end
+y = y(end:-1:1);
 end
