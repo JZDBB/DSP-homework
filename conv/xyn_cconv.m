@@ -59,7 +59,8 @@ stem(handles.axes1,x.index,x.value,'.');
 set(handles.axes1,'XLim',[-4 8]);
 stem(handles.axes2,h.index,h.value,'.');
 set(handles.axes2,'XLim',[-4 8]);
-
+handles.x = x;
+handles.h = h;
 handles.track = 0;
 % Choose default command line output for xyn_cconv
 handles.output = hObject;
@@ -113,7 +114,7 @@ handles.x = x;
 handles.h = h1;
 handles.m = m;
 handles.n = n;
-for k = 1:m+n
+for k = 1:m+n   
     value = circshift(h1.value,[0,k-1]);
     stem(handles.axes2,h1.index,value,'.');
     set(handles.axes2,'XLim',[-n n+m]);
